@@ -15,6 +15,9 @@ public class Spawner : MonoBehaviour
     public float minSpawnRte = 1f;
     public float maxSpawnRate = 2f;
 
+    [Range(0f, 1f)] public float coinSpawnChance = 0.15f;
+    public float coinHeightOffset = 1f;
+
     private void OnEnable()
     {
         Invoke(nameof(Spawn), Random.Range(minSpawnRte, maxSpawnRate));
@@ -27,6 +30,13 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
+        if (Random.value < coinSpawnChance)
+        {
+            Coin.Create(transform.position + Vector3.up * coinHeightOffset);
+            Invoke(nameof(Spawn), Random.Range(minSpawnRte, maxSpawnRate));
+            return;
+        }
+
         float spawnChance = Random.value;
 
         foreach (var obj in objects)

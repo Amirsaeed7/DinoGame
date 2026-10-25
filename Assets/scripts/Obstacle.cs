@@ -3,6 +3,18 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     private float leftEdge;
+    private bool hasRegisteredHit;
+
+    public bool TryRegisterHit()
+    {
+        if (hasRegisteredHit)
+        {
+            return false;
+        }
+
+        hasRegisteredHit = true;
+        return true;
+    }
 
     private void Start()
     {
