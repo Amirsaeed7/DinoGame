@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,12 @@ public class GameManager : MonoBehaviour
 
     public float gameSpeedIncrease = 0.1f;
     public float gameSpeed { get; private set; }
+
+    private Player player;
+    private Spawner spawner;
+
+    public TextMeshProUGUI gameOverText;
+    public Button retryButton;
 
     private void Awake()
     {
@@ -32,13 +40,36 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        player = FindFirstObjectByType<Player>();
+        spawner = FindFirstObjectByType<Spawner>();
         NewGame();
         
     }
 
-    private void NewGame()
+    public void NewGame()
     {
+        Obstacle[] obstacles = FindObjectsByType<Obstacle>(FindObjectsSortMode.None);
+        foreach (Obstacle obstacle in obstacles)
+        {
+            Destroy(obstacle.gameObject);
+        }
         gameSpeed = initialGameSpeed;
+        enabled = true;
+        player.gameObject.SetActive(true);
+        spawner.gameObject.SetActive(true);
+        gameOverText.gameObject.SetActive(false);
+        retryButton.gameObject.SetActive(false);
+    }
+
+    public void GameOver()
+    {
+        gameSpeed = 0f;
+        enabled = false;
+        player.gameObject.SetActive(false);
+        spawner.gameObject.SetActive(false);
+        gameOverText.gameObject.SetActive(true);
+        retryButton.gameObject.SetActive(true);
+       
     }
 
     private void Update()
